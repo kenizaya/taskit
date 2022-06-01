@@ -28,19 +28,21 @@ export const createTask = (project, title, description, dueDate, priority) => {
     task.dueDate= dueDate;
     task.priority= priority;
     console.log(task, "from createTask");
+    console.log(projects[project]);
     projects[project].push(task);
 }
 
-export const getTask = () => tasks;
+export const getTask = (project) => projects[project];
 
-export const deleteTask = (index) => tasks.splice(index, 1);
+export const deleteTask = (project, index) => projects[project].splice(index, 1);
 
-export const completeTask = (index) => {
-    completedTasks.push(tasks[index]);
-    tasks.splice(index, 1);
+export const completeTask = (project, index) => {
+    console.log("tasks:",projects[project]);
+    completedTasks.push(projects[project][index]);
+    projects[project].splice(index, 1);
 
-    console.log("tasks:",tasks);
+    
     console.log("completed tasks:", completedTasks);
 }
 
-export const changePriority = (index, priority) =>  tasks[index].priority = priority;
+export const changePriority = (project, index, priority) =>  projects[project][index].priority = priority;
