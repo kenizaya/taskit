@@ -31,3 +31,6 @@ export const createTask = (project, title, description, dueDate, priority) => {
     projects[project].push(task);
 }
 
+export const getTask = () => tasks;
+
+export const deleteTask = (index) => tasks.splice(index, 1);
