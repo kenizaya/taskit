@@ -12,6 +12,15 @@ const projects = {
             dueDate: "Task date2",
             priority: "High2",
         }],
+
+    "website": [
+        {
+            title: "Web task Title2",
+            description: "Web Task description2",
+            dueDate: "Web Task date2",
+            priority: "Web High2",
+        }
+    ],
 };
 
 const completedTasks = [];
@@ -46,3 +55,27 @@ export const completeTask = (project, index) => {
 }
 
 export const changePriority = (project, index, priority) =>  projects[project][index].priority = priority;
+
+const displaySidebar = () => {
+    const sidebar = document.querySelector(".sidebar");
+    const ul = document.querySelector("ul");
+
+    Object.keys(projects).forEach(project => {
+        const li = document.createElement("li");
+        li.textContent = project;
+        ul.appendChild(li);
+    });
+
+}
+
+const displayMain = () => {
+    const main = document.querySelector(".main");
+    const currentProject = document.querySelector(".current-project");
+    const newTask = document.querySelector("#new-task");
+
+    currentProject.textContent = "Inbox";
+    newTask.placeholder = `+ Add task to "${currentProject.textContent}", press Enter to save`
+}
+
+displaySidebar();
+displayMain();
