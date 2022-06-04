@@ -61,26 +61,29 @@ export const completeTask = (project, index) => {
 export const changePriority = (project, index, priority) =>  projects[project][index].priority = priority;
 
 const displaySidebar = () => {
-    const sidebar = document.querySelector(".sidebar");
     const ul = document.querySelector("ul");
 
     Object.keys(projects).forEach(project => {
         const li = document.createElement("li");
         li.textContent = project;
         ul.appendChild(li);
+        li.addEventListener('click', (e) => displayMainHeader(li.textContent));
     });
 
 }
 
-const displayMainHeader = () => {
+const displayMainHeader = (project = "Inbox") => {
     const mainHeader = document.querySelector(".main-header");
     const currentProject = document.querySelector(".current-project");
     const newTask = document.querySelector("#new-task");
 
     document.querySelector(".project-icon > img").src = IconFileTree;
 
-    currentProject.textContent = "Inbox";
+    currentProject.textContent = project;
+    console.log("from displayMainHeader", project);
     newTask.placeholder = `+ Add task to "${currentProject.textContent}", press Enter to save`
+
+    displayTasks(project);
 
     // if (newTask === document.activeElement) {
         
@@ -93,35 +96,51 @@ const displayTasks = (project) => {
 
     let id = 0;
 
-    const div = document.createElement("div");
-    div.classList.add("task");
-    form.appendChild(div);
+    while(form.hasChildNodes()) {
+        form.removeChild(form.firstChild);
+    }
 
-    const taskContainer = document.createElement("input");
-    taskContainer.setAttribute("type", "checkbox");
-    taskContainer.setAttribute("id", `id${id}`);
+    projects[project].forEach(task => {
+        const div = document.createElement("div");
+        div.classList.add("task");
+        form.appendChild(div);
     
-
-    const label = document.createElement("label");
-    label.textContent = projects[project][projects[project].length - 1].title;
-    label.setAttribute("for", `id${id}`);
-    label.classList.add("task-checked");
-    id++;
-
-    div.append(taskContainer, label);
-
+        const taskContainer = document.createElement("input");
+        taskContainer.setAttribute("type", "checkbox");
+        taskContainer.setAttribute("id", `id${id}`);
+        
+    
+        const label = document.createElement("label");
+        label.textContent = task.title;
+        label.setAttribute("for", `id${id}`);
+        label.classList.add("task-checked");
+        id++;
+    
+        div.append(taskContainer, label);
+    })
     
 }
 
-const addTask = () => {
-    
+const displayCompletedTasks = () => {
+    const sidebar = document.querySelector(".sidebar");
 
-   
-    
+    const ul = document.createElement("ul");
+
+    sidebar.appendChild(ul);
+
+    const li = document.createElement("li");
+
+    li.textContent = "Completed Tasks";
+
+    completedTasks.forEach(task => {
+        task.title
+    });
+
+
 }
 
 displaySidebar();
-displayMainHeader();
+displayMainHeader("Inbox");
 
 const currentProject = document.querySelector(".current-project").textContent;
 const newTask = document.getElementById("new-task");
