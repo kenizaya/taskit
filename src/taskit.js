@@ -41,7 +41,7 @@ export const createTask = (project, title, description = "None", dueDate = "Toda
     task.dueDate= dueDate;
     task.priority= priority;
     console.log(task, "from createTask");
-    console.log(projects[project]);
+    console.log(project);
     projects[project].push(task);
 }
 
@@ -87,48 +87,51 @@ const displayMainHeader = () => {
     // }
 }
 
-const displayTasks = () => {
+const displayTasks = (project) => {
     const mainTasks = document.querySelector(".main-tasks");
-
-    const form = document.createElement("form");
-    mainTasks.appendChild(form);
+    const form = document.getElementById("task-list-form");
 
     let id = 0;
 
-    Object.keys(projects).forEach(project => {
-        const div = document.createElement("div");
-        div.classList.add("task");
-        form.appendChild(div);
+    const div = document.createElement("div");
+    div.classList.add("task");
+    form.appendChild(div);
 
-        const task = document.createElement("input");
-        task.setAttribute("type", "checkbox");
-        task.setAttribute("id", `id${id}`);
-        
+    const taskContainer = document.createElement("input");
+    taskContainer.setAttribute("type", "checkbox");
+    taskContainer.setAttribute("id", `id${id}`);
+    
 
-        const label = document.createElement("label");
-        label.textContent = projects[project][0].title;
-        label.setAttribute("for", `id${id}`);
-        label.classList.add("task-checked");
-        id++;
+    const label = document.createElement("label");
+    label.textContent = projects[project][projects[project].length - 1].title;
+    label.setAttribute("for", `id${id}`);
+    label.classList.add("task-checked");
+    id++;
 
-        div.append(task, label);
-    });
+    div.append(taskContainer, label);
+
+    
 }
 
 const addTask = () => {
-    const currentProject = document.querySelector(".current-project");
-    const newTask = document.getElementById("new-task");
+    
 
-    newTask.addEventListener('keypress', (e) => {
-        if (e.key === "Enter") {
-            // createTask(projects[currentProject], )
-            e.preventDefault();
-            console.log(currentProject);
-        }
-    })
+   
     
 }
 
 displaySidebar();
 displayMainHeader();
-displayTasks();
+
+const currentProject = document.querySelector(".current-project").textContent;
+const newTask = document.getElementById("new-task");
+displayTasks(currentProject);
+
+newTask.addEventListener('keypress', (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        createTask(currentProject, e.target.value);
+        e.target.value = "";
+        displayTasks(currentProject);
+    }
+})
