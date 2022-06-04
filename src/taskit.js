@@ -1,5 +1,9 @@
+import IconFileTree from './assets/file-tree.svg';
+import IconCalendar from './assets/calendar.svg';
+import IconDropdown from './assets/dropdown.svg';
+
 const projects = {
-    "inbox": [
+    "Inbox": [
         {
             title: "Task Title",
             description: "Task description",
@@ -30,7 +34,7 @@ export const createProject = (project) => {
         
 }
 
-export const createTask = (project, title, description, dueDate, priority) => {
+export const createTask = (project, title, description = "None", dueDate = "Today", priority = "Low") => {
     const task = {};
     task.title= title;
     task.description= description;
@@ -68,14 +72,63 @@ const displaySidebar = () => {
 
 }
 
-const displayMain = () => {
-    const main = document.querySelector(".main");
+const displayMainHeader = () => {
+    const mainHeader = document.querySelector(".main-header");
     const currentProject = document.querySelector(".current-project");
     const newTask = document.querySelector("#new-task");
 
+    document.querySelector(".project-icon > img").src = IconFileTree;
+
     currentProject.textContent = "Inbox";
     newTask.placeholder = `+ Add task to "${currentProject.textContent}", press Enter to save`
+
+    // if (newTask === document.activeElement) {
+        
+    // }
+}
+
+const displayTasks = () => {
+    const mainTasks = document.querySelector(".main-tasks");
+
+    const form = document.createElement("form");
+    mainTasks.appendChild(form);
+
+    let id = 0;
+
+    Object.keys(projects).forEach(project => {
+        const div = document.createElement("div");
+        div.classList.add("task");
+        form.appendChild(div);
+
+        const task = document.createElement("input");
+        task.setAttribute("type", "checkbox");
+        task.setAttribute("id", `id${id}`);
+        
+
+        const label = document.createElement("label");
+        label.textContent = projects[project][0].title;
+        label.setAttribute("for", `id${id}`);
+        label.classList.add("task-checked");
+        id++;
+
+        div.append(task, label);
+    });
+}
+
+const addTask = () => {
+    const currentProject = document.querySelector(".current-project");
+    const newTask = document.getElementById("new-task");
+
+    newTask.addEventListener('keypress', (e) => {
+        if (e.key === "Enter") {
+            // createTask(projects[currentProject], )
+            e.preventDefault();
+            console.log(currentProject);
+        }
+    })
+    
 }
 
 displaySidebar();
-displayMain();
+displayMainHeader();
+displayTasks();
