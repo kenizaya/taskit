@@ -1,6 +1,7 @@
 import IconFileTree from './assets/file-tree.svg';
 import IconCalendar from './assets/calendar.svg';
 import IconDropdown from './assets/dropdown.svg';
+import IconPlus from './assets/plus.svg';
 
 const projects = {
     "Inbox": [
@@ -61,11 +62,27 @@ export const completeTask = (project, index) => {
 export const changePriority = (project, index, priority) =>  projects[project][index].priority = priority;
 
 const displaySidebar = () => {
+    const sidebar = document.querySelector(".sidebar");
     const ul = document.querySelector("ul");
+
+    const div = document.createElement("div");
+    div.classList.add("sidebar-projects");
+
+    const h3 = document.createElement("h3");
+    h3.textContent = "Projects";
+
+    sidebar.prepend(div);
+    div.appendChild(h3);
+
+    const plusIcon = new Image();
+    plusIcon.src = IconPlus;
+
+    sidebar.onmouseover =  () => div.appendChild(plusIcon);
 
     Object.keys(projects).forEach(project => {
         const li = document.createElement("li");
         li.textContent = project;
+        li.classList.add("sidebar-projects");
         ul.appendChild(li);
         li.addEventListener('click', () => {
             displayMainHeader(li.textContent)
@@ -183,7 +200,7 @@ const newTask = document.getElementById("new-task");
 // displayTasks(currentProject);
 
 newTask.addEventListener('keypress', (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && e.target.value) {
         const currentProject = document.querySelector(".current-project").textContent;
         e.preventDefault();
         createTask(currentProject, e.target.value);

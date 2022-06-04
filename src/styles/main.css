@@ -26,8 +26,21 @@ body {
     min-width: 220px;
 }
 
+.sidebar-projects {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px 10px 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.sidebar-projects:hover {
+    background-color: #EAE2F8;
+}
+
 h3 {
     padding-left: 40px;
+    margin: 0;
 }
 
 ul li{
