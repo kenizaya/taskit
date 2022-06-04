@@ -67,7 +67,10 @@ const displaySidebar = () => {
         const li = document.createElement("li");
         li.textContent = project;
         ul.appendChild(li);
-        li.addEventListener('click', (e) => displayMainHeader(li.textContent));
+        li.addEventListener('click', (e) => {
+            displayMainHeader(li.textContent)
+            console.log(li.textContent);
+        });
     });
 
 }
@@ -82,7 +85,6 @@ const displayMainHeader = (project = "Inbox") => {
     currentProject.textContent = project;
     console.log("from displayMainHeader", project);
     newTask.placeholder = `+ Add task to "${currentProject.textContent}", press Enter to save`
-
     displayTasks(project);
 
     // if (newTask === document.activeElement) {
@@ -99,7 +101,6 @@ const displayTasks = (project) => {
     while(form.hasChildNodes()) {
         form.removeChild(form.firstChild);
     }
-
     projects[project].forEach(task => {
         const div = document.createElement("div");
         div.classList.add("task");
@@ -117,6 +118,8 @@ const displayTasks = (project) => {
         id++;
     
         div.append(taskContainer, label);
+
+        console.log(project, projects[project]);
     })
     
 }
@@ -140,14 +143,14 @@ const displayCompletedTasks = () => {
 }
 
 displaySidebar();
-displayMainHeader("Inbox");
+displayMainHeader();
 
-const currentProject = document.querySelector(".current-project").textContent;
 const newTask = document.getElementById("new-task");
-displayTasks(currentProject);
+// displayTasks(currentProject);
 
 newTask.addEventListener('keypress', (e) => {
     if (e.key === "Enter") {
+        const currentProject = document.querySelector(".current-project").textContent;
         e.preventDefault();
         createTask(currentProject, e.target.value);
         e.target.value = "";
