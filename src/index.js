@@ -15,6 +15,4 @@ console.log("Teset", getTask("test"));
 changePriority("test", 0, "Low");
 createProject("website blog");
 
-completeTask("test", 0);
-
 

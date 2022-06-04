@@ -50,9 +50,9 @@ export const getTask = (project) => projects[project];
 export const deleteTask = (project, index) => projects[project].splice(index, 1);
 
 export const completeTask = (project, index) => {
-    console.log("tasks:",projects[project]);
-    completedTasks.push(projects[project][index]);
-    projects[project].splice(index, 1);
+    console.log("tasks:", project);
+    completedTasks.push(project[index]);
+    project.splice(index, 1);
 
     
     console.log("completed tasks:", completedTasks);
@@ -67,18 +67,35 @@ const displaySidebar = () => {
         const li = document.createElement("li");
         li.textContent = project;
         ul.appendChild(li);
-        li.addEventListener('click', (e) => {
+        li.addEventListener('click', () => {
             displayMainHeader(li.textContent)
             console.log(li.textContent);
         });
     });
 
+    displayCompletedTasks();
+
 }
 
 const displayMainHeader = (project = "Inbox") => {
-    const mainHeader = document.querySelector(".main-header");
+
+    const newTaskForm = document.querySelector("#new-task-form");
     const currentProject = document.querySelector(".current-project");
-    const newTask = document.querySelector("#new-task");
+    const newTask = document.createElement("input");
+    const newTaskLabel = document.createElement("label")
+
+    while (newTaskForm.hasChildNodes()) {
+        newTaskForm.removeChild(newTaskForm.firstChild);
+    }
+
+    newTask.setAttribute("type", "text");
+    newTask.setAttribute("name", "new-task");
+    newTask.setAttribute("id", "new-task");
+
+    newTaskLabel.setAttribute("for", "new-task");
+
+    newTaskForm.append(newTask, newTaskLabel);
+
 
     document.querySelector(".project-icon > img").src = IconFileTree;
 
@@ -92,16 +109,17 @@ const displayMainHeader = (project = "Inbox") => {
     // }
 }
 
-const displayTasks = (project) => {
-    const mainTasks = document.querySelector(".main-tasks");
+const displayTasks = (proj) => {
     const form = document.getElementById("task-list-form");
+
+    let project = proj === completedTasks ? completedTasks : projects[proj];
 
     let id = 0;
 
     while(form.hasChildNodes()) {
         form.removeChild(form.firstChild);
     }
-    projects[project].forEach(task => {
+    project.forEach(task => {
         const div = document.createElement("div");
         div.classList.add("task");
         form.appendChild(div);
@@ -109,23 +127,33 @@ const displayTasks = (project) => {
         const taskContainer = document.createElement("input");
         taskContainer.setAttribute("type", "checkbox");
         taskContainer.setAttribute("id", `id${id}`);
-        
+        if (project === completedTasks) {
+            taskContainer.checked = true;
+        }
     
         const label = document.createElement("label");
         label.textContent = task.title;
         label.setAttribute("for", `id${id}`);
         label.classList.add("task-checked");
         id++;
+
     
         div.append(taskContainer, label);
 
-        console.log(project, projects[project]);
+        taskContainer.addEventListener("click", () => {
+            const currentProject = document.querySelector(".current-project").textContent;
+            completeTask(project, taskContainer.id.substring(2));
+            displayTasks(currentProject);
+        }, {once: true});
+
+        console.log(project);
     })
     
 }
 
 const displayCompletedTasks = () => {
     const sidebar = document.querySelector(".sidebar");
+    const newTaskForm = document.getElementById("new-task-form");
 
     const ul = document.createElement("ul");
 
@@ -135,10 +163,16 @@ const displayCompletedTasks = () => {
 
     li.textContent = "Completed Tasks";
 
-    completedTasks.forEach(task => {
-        task.title
-    });
+    ul.appendChild(li);
 
+    li.addEventListener('click', () => {
+        while (newTaskForm.hasChildNodes()) {
+            newTaskForm.removeChild(newTaskForm.firstChild);
+        }
+        document.querySelector(".current-project").textContent = li.textContent;
+        
+        displayTasks(completedTasks);
+    });
 
 }
 
