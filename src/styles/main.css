@@ -30,8 +30,9 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 10px 10px 10px 0;
-    margin: 20px 0;
+    margin: 15px 0;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .sidebar-projects:hover {
@@ -60,7 +61,8 @@ ul li{
     font-weight: 400;
 }
 
-#new-task {
+#new-task,
+#new-project {
     width: 90%;
     margin: 0 20px;
     height: 20px;
@@ -72,10 +74,28 @@ ul li{
 
 }
 
-#new-task:focus {
+#new-task:focus,
+#new-project:focus {
     border: 1px solid #A081D9;
     outline: none;
     background-color: #ffffff;
+}
+
+#new-project {
+    margin: 0;
+    padding: 14px 20px;
+    border-radius: 0;
+}
+
+#new-project-form {
+    margin-left: 30px;
+    display: none;
+    border-radius: 6px;
+    align-items: center;
+
+}
+
+.btn-submit-project {
 }
 
 form {

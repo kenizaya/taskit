@@ -2,6 +2,7 @@ import IconFileTree from './assets/file-tree.svg';
 import IconCalendar from './assets/calendar.svg';
 import IconDropdown from './assets/dropdown.svg';
 import IconPlus from './assets/plus.svg';
+import IconSubmit from './assets/submit.svg';
 
 const projects = {
     "Inbox": [
@@ -71,13 +72,42 @@ const displaySidebar = () => {
     const h3 = document.createElement("h3");
     h3.textContent = "Projects";
 
+    const newProjectForm = document.querySelector("#new-project-form");
+    const btnSubmitProject = document.createElement("input");
+    btnSubmitProject.setAttribute("type", "image");
+    btnSubmitProject.src = IconSubmit;
+    newProjectForm.appendChild(btnSubmitProject);
+
     sidebar.prepend(div);
     div.appendChild(h3);
 
     const plusIcon = new Image();
     plusIcon.src = IconPlus;
 
-    sidebar.onmouseover =  () => div.appendChild(plusIcon);
+    div.appendChild(plusIcon);
+
+    div.addEventListener('click', () => {
+        newProjectForm.style.display = newProjectForm.style.display === "flex" ? "none" : "flex";
+    });
+
+    newProjectForm.addEventListener('keypress', (e) => {
+        if (e.key === "Enter" && e.target.value) {
+            e.preventDefault();
+            createProject(e.target.value);
+            const li = document.createElement("li");
+            li.textContent = e.target.value;
+            li.classList.add("sidebar-projects");
+            ul.appendChild(li);
+            li.addEventListener('click', () => {
+                displayMainHeader(li.textContent);
+                console.log(li.textContent);
+            });
+
+            console.log(projects);
+
+            e.target.value = "";
+        }
+    });
 
     Object.keys(projects).forEach(project => {
         const li = document.createElement("li");
