@@ -103,7 +103,7 @@ const displaySidebar = () => {
                 console.log(li.textContent);
             });
 
-            console.log(projects);
+            console.log("projects", projects);
 
             e.target.value = "";
         }
@@ -142,6 +142,8 @@ const displayMainHeader = (project = "Inbox") => {
     newTaskLabel.setAttribute("for", "new-task");
 
     newTaskForm.append(newTask, newTaskLabel);
+
+    addNewTaskListener();
 
 
     document.querySelector(".project-icon > img").src = IconFileTree;
@@ -223,18 +225,25 @@ const displayCompletedTasks = () => {
 
 }
 
+const addNewTaskListener = () => {
+    const newTask = document.getElementById("new-task");
+    newTask.addEventListener('keypress', (e) => {
+        if (e.key === "Enter" && e.target.value) {
+            const currentProject = document.querySelector(".current-project").textContent;
+            e.preventDefault();
+            createTask(currentProject, e.target.value);
+            e.target.value = "";
+            displayTasks(currentProject);
+        }
+    })
+}
+
 displaySidebar();
 displayMainHeader();
+addNewTaskListener();
 
-const newTask = document.getElementById("new-task");
+
 // displayTasks(currentProject);
 
-newTask.addEventListener('keypress', (e) => {
-    if (e.key === "Enter" && e.target.value) {
-        const currentProject = document.querySelector(".current-project").textContent;
-        e.preventDefault();
-        createTask(currentProject, e.target.value);
-        e.target.value = "";
-        displayTasks(currentProject);
-    }
-})
+
+
