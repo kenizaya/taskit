@@ -171,7 +171,7 @@ const displayTasks = (proj) => {
     project.forEach(task => {
         const div = document.createElement("div");
         div.classList.add("task");
-        form.appendChild(div);
+        form.prepend(div);
     
         const taskContainer = document.createElement("input");
         taskContainer.setAttribute("type", "checkbox");
@@ -182,7 +182,7 @@ const displayTasks = (proj) => {
     
         const label = document.createElement("label");
         label.textContent = task.title;
-        label.setAttribute("for", `id${id}`);
+        // label.setAttribute("for", `id${id}`);
         label.classList.add("task-checked");
         id++;
 
@@ -195,7 +195,13 @@ const displayTasks = (proj) => {
             displayTasks(currentProject);
         }, {once: true});
 
+        label.addEventListener('click', () => {
+            console.log("label", label);
+        })
+
         console.log(project);
+
+        
     })
     
 }
@@ -242,8 +248,6 @@ displaySidebar();
 displayMainHeader();
 addNewTaskListener();
 
-
-// displayTasks(currentProject);
 
 
 
