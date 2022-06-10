@@ -4,6 +4,10 @@ import IconDropdown from './assets/dropdown.svg';
 import IconPlus from './assets/plus.svg';
 import IconSubmit from './assets/submit.svg';
 
+const get = {
+    currentProject: document.querySelector(".current-project"),
+}
+
 const projects = {
     "Inbox": [
         {
@@ -127,13 +131,11 @@ const displaySidebar = () => {
 const displayMainHeader = (project = "Inbox") => {
 
     const newTaskForm = document.querySelector("#new-task-form");
-    const currentProject = document.querySelector(".current-project");
+    const currentProject = get.currentProject;
     const newTask = document.createElement("input");
     const newTaskLabel = document.createElement("label")
 
-    while (newTaskForm.hasChildNodes()) {
-        newTaskForm.removeChild(newTaskForm.firstChild);
-    }
+    removeElements(newTaskForm);
 
     newTask.setAttribute("type", "text");
     newTask.setAttribute("name", "new-task");
@@ -143,6 +145,7 @@ const displayMainHeader = (project = "Inbox") => {
 
     newTaskForm.append(newTask, newTaskLabel);
 
+    addPriorityDropdown(newTaskForm);
     addNewTaskListener();
 
 
@@ -153,9 +156,6 @@ const displayMainHeader = (project = "Inbox") => {
     newTask.placeholder = `+ Add task to "${currentProject.textContent}", press Enter to save`
     displayTasks(project);
 
-    // if (newTask === document.activeElement) {
-        
-    // }
 }
 
 const displayTasks = (proj) => {
@@ -165,9 +165,8 @@ const displayTasks = (proj) => {
 
     let id = 0;
 
-    while(form.hasChildNodes()) {
-        form.removeChild(form.firstChild);
-    }
+    removeElements(form);
+
     project.forEach(task => {
         const div = document.createElement("div");
         div.classList.add("task");
@@ -178,11 +177,11 @@ const displayTasks = (proj) => {
         taskContainer.setAttribute("id", `id${id}`);
         if (project === completedTasks) {
             taskContainer.checked = true;
+            taskContainer.disabled = true;
         }
     
         const label = document.createElement("label");
         label.textContent = task.title;
-        // label.setAttribute("for", `id${id}`);
         label.classList.add("task-checked");
         id++;
 
@@ -190,14 +189,12 @@ const displayTasks = (proj) => {
         div.append(taskContainer, label);
 
         taskContainer.addEventListener("click", () => {
-            const currentProject = document.querySelector(".current-project").textContent;
+            const currentProject = get.currentProject.textContent;
             completeTask(project, taskContainer.id.substring(2));
             displayTasks(currentProject);
         }, {once: true});
 
-        label.addEventListener('click', () => {
-            console.log("label", label);
-        })
+        label.addEventListener('click', () => displayDescription(project[taskContainer.id.substring(2)]));
 
         console.log(project);
 
@@ -221,27 +218,110 @@ const displayCompletedTasks = () => {
     ul.appendChild(li);
 
     li.addEventListener('click', () => {
-        while (newTaskForm.hasChildNodes()) {
-            newTaskForm.removeChild(newTaskForm.firstChild);
-        }
-        document.querySelector(".current-project").textContent = li.textContent;
+        removeElements(newTaskForm);
+        get.currentProject.textContent = li.textContent;
         
         displayTasks(completedTasks);
     });
 
 }
 
+const displayDescription = (task) => {
+    const descriptionContainer = document.querySelector(".description-container");
+    removeElements(descriptionContainer);
+    descriptionContainer.style.display = "block";
+
+    const h2 = document.createElement("h2");
+    h2.textContent = "Description";
+    descriptionContainer.appendChild(h2);
+    createTextArea("current-task", 1, 33);
+    createTextArea("current-task-description", 40, 40);
+
+    const currentTask = document.querySelector(".current-task");
+    const currentTaskDescription = document.querySelector(".current-task-description");
+
+    currentTask.value = task.title;
+
+    currentTaskDescription.value = task.description;
+
+    currentTask.addEventListener('input', () => {
+        updateTitle(task, currentTask.value);
+    });
+
+    currentTaskDescription.addEventListener('input', () => {
+        updateDescription(task, currentTaskDescription.value);
+    });
+}
+
+const createTextArea = (className, rows, columns) => {
+    const descriptionContainer = document.querySelector(".description-container");
+    const textArea = document.createElement("textarea");
+
+    textArea.classList.add(className);
+    textArea.setAttribute("rows", rows);
+    textArea.setAttribute("cols", columns);
+    textArea.setAttribute("spellcheck", false);
+
+    if (className === "current-task-description") {
+        textArea.setAttribute("placeholder", "Description");
+    }
+
+    descriptionContainer.appendChild(textArea);
+}
+
+const updateTitle = (task, title) => {
+    task.title = title;
+    console.log(projects);
+}
+
+const updateDescription = (task, description) => {
+    task.description = description;
+}
+
 const addNewTaskListener = () => {
     const newTask = document.getElementById("new-task");
+    const newTaskForm = document.getElementById("new-task-form");
     newTask.addEventListener('keypress', (e) => {
         if (e.key === "Enter" && e.target.value) {
-            const currentProject = document.querySelector(".current-project").textContent;
+            const currentProject = get.currentProject.textContent;
             e.preventDefault();
-            createTask(currentProject, e.target.value);
+            createTask(currentProject, e.target.value, "", "", newTaskForm.elements['priority'].value);
             e.target.value = "";
             displayTasks(currentProject);
         }
     })
+}
+
+const addPriorityDropdown = (form) => {
+    const select = document.createElement("select");
+    const high = document.createElement("option");
+    const normal = document.createElement("option");
+    const low = document.createElement("option");
+
+    select.setAttribute("name", "priority");
+    select.setAttribute("id", "priority");
+
+    high.textContent = "High";
+    high.setAttribute("value", "High");
+    high.style.color = "#CF1124";
+
+    normal.textContent = "Normal";
+    normal.setAttribute("value", "Normal");
+    normal.style.color = "#CB6E17";
+
+    low.textContent = "Low";
+    low.setAttribute("value", "Low");
+    low.setAttribute("selected", '');
+    low.style.color = "#724BB7";
+
+    form.append(select);
+    select.append(high, normal, low);
+}
+
+const removeElements = (container) => {
+    while (container.hasChildNodes()) {
+        container.removeChild(container.firstChild);
+    }
 }
 
 displaySidebar();
