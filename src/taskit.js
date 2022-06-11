@@ -4,7 +4,7 @@ import IconDropdown from './assets/dropdown.svg';
 import IconPlus from './assets/plus.svg';
 import IconSubmit from './assets/submit.svg';
 
-const { addDays, format } = require("date-fns");
+const { addDays, format, } = require("date-fns");
 
 
 const get = {
@@ -174,9 +174,18 @@ const displayTasks = (proj) => {
     removeElements(form);
 
     project.forEach(task => {
+        const taskContainerDiv = document.createElement("div");
         const div = document.createElement("div");
+        const date = document.createElement("span");
+        const year = task.dueDate.substring(0, 4);
+        const month = task.dueDate.substring(5, 7) - 1;
+        const day = task.dueDate.substring(8, 10);
+
+        date.append(format(new Date(year, month, day), "d MMM"));
+
+        taskContainerDiv.classList.add("task-container-div");
         div.classList.add("task");
-        form.prepend(div);
+        form.prepend(taskContainerDiv);
     
         const taskContainer = document.createElement("input");
         taskContainer.setAttribute("type", "checkbox");
@@ -187,12 +196,15 @@ const displayTasks = (proj) => {
             taskContainer.disabled = true;
         }
 
-        if (project[taskIndex].priority === "High") {
+        if (task.priority === "High") {
             div.style.borderLeft = "2px solid #CF1124";
-        } else if (project[taskIndex].priority === "Normal") {
+            date.style.color = "#CF1124";
+        } else if (task.priority === "Normal") {
             div.style.borderLeft = "2px solid #F0B429";
-        } else if (project[taskIndex].priority === "Low") {
+            date.style.color = "#F0B429";
+        } else if (task.priority === "Low") {
             div.style.borderLeft = "2px solid #724BB7";
+            date.style.color = "#724BB7";
         }
     
         const label = document.createElement("label");
@@ -202,6 +214,7 @@ const displayTasks = (proj) => {
 
     
         div.append(taskContainer, label);
+        taskContainerDiv.append(div, date);
 
         taskContainer.addEventListener("click", () => {
             const currentProject = get.currentProject.textContent;
@@ -209,11 +222,8 @@ const displayTasks = (proj) => {
             displayTasks(currentProject);
         }, {once: true});
 
-        label.addEventListener('click', () => displayDescription(project[taskIndex]));
-
-        console.log(project);
-
-        
+        label.addEventListener('click', () => displayDescription(task));
+  
     })
     
 }
@@ -243,30 +253,25 @@ const displayCompletedTasks = () => {
 
 const displayDescription = (task) => {
     const descriptionContainer = document.querySelector(".description-container");
+    const div = document.createElement("div");
+
     removeElements(descriptionContainer);
     descriptionContainer.style.display = "block";
-    const div = document.createElement("div");
+
     div.classList.add("date-priority-description");
     descriptionContainer.append(div);
+
     addDatePicker(descriptionContainer, "date-priority-description");
     addPriorityDropdown(descriptionContainer, "date-priority-description");
 
     const descriptionDate = document.querySelector(".description-container input[type='date']");
     descriptionDate.value = task.dueDate;
+    descriptionDate.onchange = () => task.dueDate = descriptionDate.value;
 
     const descriptionPriority = document.querySelector(".description-container select");
     descriptionPriority.value = task.priority;
-
-
-    descriptionDate.onchange = () => {
-        task.dueDate = descriptionDate.value;
-        console.log(projects);
-    }
-    descriptionPriority.onchange = () => {
-        task.priority = descriptionPriority.value;
-        console.log(projects);
-    }
-
+    descriptionPriority.onchange = () => task.priority = descriptionPriority.value;
+        
 
     createTextArea("current-task", 1, 33);
     createTextArea("current-task-description", 40, 40);
@@ -275,7 +280,6 @@ const displayDescription = (task) => {
     const currentTaskDescription = document.querySelector(".current-task-description");
 
     currentTask.value = task.title;
-
     currentTaskDescription.value = task.description;
 
     currentTask.addEventListener('input', () => {
@@ -295,6 +299,10 @@ const createTextArea = (className, rows, columns) => {
     textArea.setAttribute("rows", rows);
     textArea.setAttribute("cols", columns);
     textArea.setAttribute("spellcheck", false);
+
+    if (className === "current-task") {
+        textArea.setAttribute("placeholder", "What needs doing?");
+    }
 
     if (className === "current-task-description") {
         textArea.setAttribute("placeholder", "Description");
