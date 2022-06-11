@@ -93,6 +93,12 @@ input[type="date"] {
     outline: none;
 }
 
+.date-priority-description {
+    display: flex;
+    gap: 80px;
+    padding: 12px;
+}
+
 
 #new-task:focus,
 #new-project:focus {

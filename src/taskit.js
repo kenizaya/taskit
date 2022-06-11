@@ -147,8 +147,8 @@ const displayMainHeader = (project = "Inbox") => {
 
     newTaskForm.append(newTask, newTaskLabel, datePriorityContainer);
 
-    addPriorityDropdown(newTaskForm);
-    addDatePicker(newTaskForm);
+    addPriorityDropdown(newTaskForm, "date-priority-container");
+    addDatePicker(newTaskForm, "date-priority-container");
     addNewTaskListener();
 
 
@@ -242,10 +242,14 @@ const displayDescription = (task) => {
     const descriptionContainer = document.querySelector(".description-container");
     removeElements(descriptionContainer);
     descriptionContainer.style.display = "block";
+    const div = document.createElement("div");
+    div.classList.add("date-priority-description");
 
-    const h2 = document.createElement("h2");
-    h2.textContent = "Description";
-    descriptionContainer.appendChild(h2);
+    descriptionContainer.append(div);
+
+    addDatePicker(descriptionContainer, "date-priority-description");
+    addPriorityDropdown(descriptionContainer, "date-priority-description");
+
     createTextArea("current-task", 1, 33);
     createTextArea("current-task-description", 40, 40);
 
@@ -304,8 +308,8 @@ const addNewTaskListener = () => {
     })
 }
 
-const addPriorityDropdown = (form) => {
-    const priorityContainer = document.querySelector(".date-priority-container");
+const addPriorityDropdown = (form, containerClassName) => {
+    const priorityContainer = document.querySelector("." + containerClassName);
 
     const select = document.createElement("select");
     const high = document.createElement("option");
@@ -328,14 +332,13 @@ const addPriorityDropdown = (form) => {
     low.setAttribute("selected", '');
     low.style.color = "#724BB7";
 
-    console.log(priorityContainer);
     priorityContainer.append(select);
     form.append(priorityContainer);
     select.append(high, normal, low);
 }
 
-const addDatePicker = (form) => {
-    const dateContainer = document.querySelector(".date-priority-container");
+const addDatePicker = (form, containerClassName) => {
+    const dateContainer = document.querySelector("." + containerClassName);
     const date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("name", "dueDate");
