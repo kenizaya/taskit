@@ -4,6 +4,9 @@ import IconDropdown from './assets/dropdown.svg';
 import IconPlus from './assets/plus.svg';
 import IconSubmit from './assets/submit.svg';
 
+const { addDays, format } = require("date-fns");
+
+
 const get = {
     currentProject: document.querySelector(".current-project"),
 }
@@ -13,13 +16,13 @@ const projects = {
         {
             title: "Task Title",
             description: "Task description",
-            dueDate: "2022-06-15",
+            dueDate: format(addDays(new Date(), 7), "yyyy-MM-dd"),
             priority: "High",
         },
         {
             title: "Task Title2",
             description: "Task description2",
-            dueDate: "2022-07-07",
+            dueDate: format(addDays(new Date(), 4), "yyyy-MM-dd"),
             priority: "High",
         }],
 
@@ -27,7 +30,7 @@ const projects = {
         {
             title: "Web task Title2",
             description: "Web Task description2",
-            dueDate: "2022-06-24",
+            dueDate: format(addDays(new Date(), 10), "yyyy-MM-dd"),
             priority: "Normal",
         }
     ],
@@ -255,7 +258,10 @@ const displayDescription = (task) => {
     descriptionPriority.value = task.priority;
 
 
-    descriptionDate.onchange = () => task.dueDate = descriptionDate.value;
+    descriptionDate.onchange = () => {
+        task.dueDate = descriptionDate.value;
+        console.log(projects);
+    }
     descriptionPriority.onchange = () => {
         task.priority = descriptionPriority.value;
         console.log(projects);
@@ -356,7 +362,7 @@ const addDatePicker = (form, containerClassName) => {
     date.setAttribute("type", "date");
     date.setAttribute("name", "dueDate");
     date.setAttribute("id", "dueDate");
-
+    date.value = format(new Date(), "yyyy-MM-dd");
 
     dateContainer.append(date);
     form.append(dateContainer);
