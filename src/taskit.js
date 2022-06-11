@@ -13,13 +13,13 @@ const projects = {
         {
             title: "Task Title",
             description: "Task description",
-            dueDate: "Task date",
+            dueDate: "2022-06-15",
             priority: "High",
         },
         {
             title: "Task Title2",
             description: "Task description2",
-            dueDate: "Task date2",
+            dueDate: "2022-07-07",
             priority: "High",
         }],
 
@@ -27,8 +27,8 @@ const projects = {
         {
             title: "Web task Title2",
             description: "Web Task description2",
-            dueDate: "Web Task date2",
-            priority: "Web High2",
+            dueDate: "2022-06-24",
+            priority: "Normal",
         }
     ],
 };
@@ -147,8 +147,8 @@ const displayMainHeader = (project = "Inbox") => {
 
     newTaskForm.append(newTask, newTaskLabel, datePriorityContainer);
 
-    addPriorityDropdown(newTaskForm, "date-priority-container");
     addDatePicker(newTaskForm, "date-priority-container");
+    addPriorityDropdown(newTaskForm, "date-priority-container");
     addNewTaskListener();
 
 
@@ -244,11 +244,23 @@ const displayDescription = (task) => {
     descriptionContainer.style.display = "block";
     const div = document.createElement("div");
     div.classList.add("date-priority-description");
-
     descriptionContainer.append(div);
-
     addDatePicker(descriptionContainer, "date-priority-description");
     addPriorityDropdown(descriptionContainer, "date-priority-description");
+
+    const descriptionDate = document.querySelector(".description-container input[type='date']");
+    descriptionDate.value = task.dueDate;
+
+    const descriptionPriority = document.querySelector(".description-container select");
+    descriptionPriority.value = task.priority;
+
+
+    descriptionDate.onchange = () => task.dueDate = descriptionDate.value;
+    descriptionPriority.onchange = () => {
+        task.priority = descriptionPriority.value;
+        console.log(projects);
+    }
+
 
     createTextArea("current-task", 1, 33);
     createTextArea("current-task-description", 40, 40);
@@ -319,6 +331,7 @@ const addPriorityDropdown = (form, containerClassName) => {
     select.setAttribute("name", "priority");
     select.setAttribute("id", "priority");
 
+
     high.textContent = "High";
     high.setAttribute("value", "High");
     high.style.color = "#CF1124";
@@ -342,6 +355,8 @@ const addDatePicker = (form, containerClassName) => {
     const date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("name", "dueDate");
+    date.setAttribute("id", "dueDate");
+
 
     dateContainer.append(date);
     form.append(dateContainer);
@@ -356,7 +371,3 @@ const removeElements = (container) => {
 displaySidebar();
 displayMainHeader();
 addNewTaskListener();
-
-
-
-
