@@ -20,7 +20,7 @@ const projects = {
             title: "Task Title2",
             description: "Task description2",
             dueDate: "Task date2",
-            priority: "High2",
+            priority: "High",
         }],
 
     "website": [
@@ -175,9 +175,18 @@ const displayTasks = (proj) => {
         const taskContainer = document.createElement("input");
         taskContainer.setAttribute("type", "checkbox");
         taskContainer.setAttribute("id", `id${id}`);
+        const taskIndex = taskContainer.id.substring(2);
         if (project === completedTasks) {
             taskContainer.checked = true;
             taskContainer.disabled = true;
+        }
+
+        if (project[taskIndex].priority === "High") {
+            div.style.borderLeft = "2px solid #CF1124";
+        } else if (project[taskIndex].priority === "Normal") {
+            div.style.borderLeft = "2px solid #F0B429";
+        } else if (project[taskIndex].priority === "Low") {
+            div.style.borderLeft = "2px solid #724BB7";
         }
     
         const label = document.createElement("label");
@@ -190,11 +199,11 @@ const displayTasks = (proj) => {
 
         taskContainer.addEventListener("click", () => {
             const currentProject = get.currentProject.textContent;
-            completeTask(project, taskContainer.id.substring(2));
+            completeTask(project, taskIndex);
             displayTasks(currentProject);
         }, {once: true});
 
-        label.addEventListener('click', () => displayDescription(project[taskContainer.id.substring(2)]));
+        label.addEventListener('click', () => displayDescription(project[taskIndex]));
 
         console.log(project);
 

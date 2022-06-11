@@ -116,6 +116,7 @@ form {
 .task {
     border-bottom: 1px solid #BCCCDC;
     padding: 8px 20px;
+    margin: 10px 20px;
     display: flex;
     gap: 5px;
     align-items: center;
