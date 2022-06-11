@@ -134,18 +134,21 @@ const displayMainHeader = (project = "Inbox") => {
     const currentProject = get.currentProject;
     const newTask = document.createElement("input");
     const newTaskLabel = document.createElement("label")
-
+    const datePriorityContainer = document.createElement("div");
+    
     removeElements(newTaskForm);
 
+    datePriorityContainer.classList.add("date-priority-container");
     newTask.setAttribute("type", "text");
     newTask.setAttribute("name", "new-task");
     newTask.setAttribute("id", "new-task");
 
     newTaskLabel.setAttribute("for", "new-task");
 
-    newTaskForm.append(newTask, newTaskLabel);
+    newTaskForm.append(newTask, newTaskLabel, datePriorityContainer);
 
     addPriorityDropdown(newTaskForm);
+    addDatePicker(newTaskForm);
     addNewTaskListener();
 
 
@@ -294,7 +297,7 @@ const addNewTaskListener = () => {
         if (e.key === "Enter" && e.target.value) {
             const currentProject = get.currentProject.textContent;
             e.preventDefault();
-            createTask(currentProject, e.target.value, "", "", newTaskForm.elements['priority'].value);
+            createTask(currentProject, e.target.value, "", newTaskForm.elements['dueDate'].value, newTaskForm.elements['priority'].value);
             e.target.value = "";
             displayTasks(currentProject);
         }
@@ -302,6 +305,8 @@ const addNewTaskListener = () => {
 }
 
 const addPriorityDropdown = (form) => {
+    const priorityContainer = document.querySelector(".date-priority-container");
+
     const select = document.createElement("select");
     const high = document.createElement("option");
     const normal = document.createElement("option");
@@ -323,8 +328,20 @@ const addPriorityDropdown = (form) => {
     low.setAttribute("selected", '');
     low.style.color = "#724BB7";
 
-    form.append(select);
+    console.log(priorityContainer);
+    priorityContainer.append(select);
+    form.append(priorityContainer);
     select.append(high, normal, low);
+}
+
+const addDatePicker = (form) => {
+    const dateContainer = document.querySelector(".date-priority-container");
+    const date = document.createElement("input");
+    date.setAttribute("type", "date");
+    date.setAttribute("name", "dueDate");
+
+    dateContainer.append(date);
+    form.append(dateContainer);
 }
 
 const removeElements = (container) => {
