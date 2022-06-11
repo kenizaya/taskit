@@ -1,6 +1,4 @@
 import IconFileTree from './assets/file-tree.svg';
-import IconCalendar from './assets/calendar.svg';
-import IconDropdown from './assets/dropdown.svg';
 import IconPlus from './assets/plus.svg';
 import IconSubmit from './assets/submit.svg';
 
@@ -11,36 +9,42 @@ const get = {
     currentProject: document.querySelector(".current-project"),
 }
 
-const projects = {
-    "Inbox": [
+let projects = {
+    'Inbox': [
         {
-            title: "Task Title",
-            description: "Task description",
-            dueDate: format(addDays(new Date(), 7), "yyyy-MM-dd"),
-            priority: "High",
+            title: 'Task Title',
+            description: 'Task description',
+            dueDate: format(addDays(new Date(), 7), 'yyyy-MM-dd'),
+            priority: 'High',
         },
         {
-            title: "Task Title2",
-            description: "Task description2",
-            dueDate: format(addDays(new Date(), 4), "yyyy-MM-dd"),
-            priority: "High",
+            title: 'Task Title2',
+            description: 'Task description2',
+            dueDate: format(addDays(new Date(), 4), 'yyyy-MM-dd'),
+            priority: 'High',
         }],
 
-    "website": [
+    'website': [
         {
-            title: "Web task Title2",
-            description: "Web Task description2",
-            dueDate: format(addDays(new Date(), 10), "yyyy-MM-dd"),
-            priority: "Normal",
+            title: 'Web task Title2',
+            description: 'Web Task description2',
+            dueDate: format(addDays(new Date(), 10), 'yyyy-MM-dd'),
+            priority: 'Normal',
         }
     ],
 };
 
+
+if (!localStorage.getItem("projects")) {
+    localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+projects = JSON.parse(localStorage.getItem("projects"));
+
 const completedTasks = [];
 
 export const createProject = (project) => {
-    projects[project] = [];
-        
+    projects[project] = []       
 }
 
 export const createTask = (project, title, description = "None", dueDate = "Today", priority = "Low") => {
@@ -101,13 +105,13 @@ const displaySidebar = () => {
         if (e.key === "Enter" && e.target.value) {
             e.preventDefault();
             createProject(e.target.value);
+            localStorage.setItem("projects", JSON.stringify(projects));
             const li = document.createElement("li");
             li.textContent = e.target.value;
             li.classList.add("sidebar-projects");
             ul.appendChild(li);
             li.addEventListener('click', () => {
                 displayMainHeader(li.textContent);
-                console.log(li.textContent);
             });
 
             console.log("projects", projects);
@@ -222,7 +226,7 @@ const displayTasks = (proj) => {
             displayTasks(currentProject);
         }, {once: true});
 
-        label.addEventListener('click', () => displayDescription(task));
+        taskContainerDiv.addEventListener('click', () => displayDescription(task));
   
     })
     
@@ -329,6 +333,7 @@ const addNewTaskListener = () => {
             e.preventDefault();
             createTask(currentProject, e.target.value, "", newTaskForm.elements['dueDate'].value, newTaskForm.elements['priority'].value);
             e.target.value = "";
+            localStorage.setItem("projects", JSON.stringify(projects));
             displayTasks(currentProject);
         }
     })
