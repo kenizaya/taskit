@@ -9,22 +9,45 @@ export const get = {
 export let projects = {
     'Inbox': [
         {
-            title: 'Task Title',
-            description: 'Task description',
+            title: 'Water the plants',
+            description: "I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.\
+                            Don't underestimate the Force.\
+                            I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.",
             dueDate: format(addDays(new Date(), 7), 'yyyy-MM-dd'),
-            priority: 'High',
+            priority: 'Normal',
         },
         {
-            title: 'Task Title2',
-            description: 'Task description2',
+            title: 'Get Milk',
+            description: "I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.\
+                            Don't underestimate the Force.\
+                            I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.",
+            dueDate: format(addDays(new Date(), 4), 'yyyy-MM-dd'),
+            priority: 'Low',
+        },
+        {
+            title: 'Cook delicious dinner',
+            description: "I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.\
+                            Don't underestimate the Force.\
+                            I need your help, Luke. She needs your help.\
+                            I'm getting too old for this sort of thing.",
             dueDate: format(addDays(new Date(), 4), 'yyyy-MM-dd'),
             priority: 'High',
-        }],
+        },
+    ],
 
-    'website': [
+    'Website': [
         {
-            title: 'Web task Title2',
-            description: 'Web Task description2',
+            title: 'Change font size to 1.4rem',
+            description: "I suggest you try it again, Luke.\
+                            This time, let go your conscious self and act on instinct.\
+                            What?! I suggest you try it again, Luke.\
+                            Look, I can take you as far as Anchorhead.\
+                            You can get a transport there to Mos Eisley or wherever you're going.",
             dueDate: format(addDays(new Date(), 10), 'yyyy-MM-dd'),
             priority: 'Normal',
         }

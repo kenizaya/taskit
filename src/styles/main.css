@@ -10,6 +10,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Roboto, sans-serif;
+    color: #102A43;
 }
 
 .container {
@@ -22,7 +23,13 @@ body {
 
 .sidebar {
     border: 1px solid #BCCCDC;
+    box-shadow: 1px 1px #BCCCDC;
     min-width: 220px;
+}
+
+.inbox-completed {
+    border-bottom: 1px solid #9FB3C8;
+    box-shadow: 1px 1px #BCCCDC;
 }
 
 .sidebar-projects {
@@ -32,10 +39,6 @@ body {
     margin: 15px 0;
     border-radius: 4px;
     cursor: pointer;
-}
-
-.sidebar-projects:hover {
-    background-color: #EAE2F8;
 }
 
 h3 {
@@ -130,6 +133,7 @@ form {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #BCCCDC;
+    box-shadow: 1px 1px #BCCCDC;
     margin: 10px 30px 10px 20px;
     cursor: pointer;
 
@@ -177,13 +181,30 @@ input[type="checkbox"]:checked + label.task-checked {
     min-width: 100%;
 }
 
+.p-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #243B53;
+}
+
+.cursor {
+    width: 33%;
+}
+
 
 .current-task,
 .current-task-description {
     resize: none;
     background-color: #F0F4F8;
+    color: #102A43;
     border: none;
     outline: none;
     padding: 10px;
     font-family: Roboto, sans-serif;
+}
+
+.current-task-description {
+    font-size: 0.86rem;
 }

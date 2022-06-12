@@ -3,13 +3,14 @@ import { projects, get, completedTasks, createProject, completeTask, updateTitle
         
 import { removeElements, addNewTaskListener } from "./helperFunctions";
 import IconFileTree from './assets/file-tree.svg';
+import IconCursor from './assets/cursor.svg';
 
 
 const { format, } = require("date-fns");
 
 export const displaySidebar = () => {
     const sidebar = document.querySelector(".sidebar");
-    const ul = document.querySelector("ul");
+    const ul = document.querySelector(".projects-list");
 
     const div = document.createElement("div");
     div.classList.add("sidebar-projects");
@@ -45,7 +46,12 @@ export const displaySidebar = () => {
         const li = document.createElement("li");
         li.textContent = project;
         li.classList.add("sidebar-projects");
-        ul.appendChild(li);
+        
+        if (li.textContent === "Inbox") {
+            document.querySelector(".inbox-completed > ul").append(li);
+        } else {
+            ul.appendChild(li);
+        }
         li.addEventListener('click', () => {
             displayMainHeader(li.textContent)
             console.log(li.textContent);
@@ -148,24 +154,22 @@ export const displayTasks = (proj) => {
         }, {once: true});
 
         taskContainerDiv.addEventListener('click', () => displayDescription(task));
-  
     })
-    
 }
 
 export const displayCompletedTasks = () => {
-    const sidebar = document.querySelector(".sidebar");
+    const inboxCompleted = document.querySelector(".inbox-completed");
     const newTaskForm = document.getElementById("new-task-form");
 
-    const ul = document.createElement("ul");
+    const ul = document.querySelector(".inbox-completed > ul");
 
-    sidebar.appendChild(ul);
+    inboxCompleted.appendChild(ul);
 
     const li = document.createElement("li");
 
     li.textContent = "Completed Tasks";
 
-    ul.appendChild(li);
+    ul.prepend(li);
 
     li.addEventListener('click', () => {
         removeElements(newTaskForm);
@@ -175,6 +179,9 @@ export const displayCompletedTasks = () => {
     });
 
 }
+
+document.querySelector(".cursor").src = IconCursor;
+
 
 export const displayDescription = (task) => {
     const descriptionContainer = document.querySelector(".description-container");
@@ -198,7 +205,7 @@ export const displayDescription = (task) => {
     descriptionPriority.onchange = () => updatePriority(task, descriptionPriority.value);
 
     createTextArea("current-task", 1, 33);
-    createTextArea("current-task-description", 40, 40);
+    createTextArea("current-task-description", 40, 33);
 
     const currentTask = document.querySelector(".current-task");
     const currentTaskDescription = document.querySelector(".current-task-description");
